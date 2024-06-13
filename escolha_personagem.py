@@ -1,20 +1,17 @@
 import pygame
 import sys
 
-#iniciando tela
+# Iniciando tela
 pygame.init()
 
-
-#configurando tela
+# Configurando tela
 largura = 800
 altura = 500
 tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption("JOGO BÃO")
 
-
-#imagem de fundo da tela
+# Imagem de fundo da tela
 background_imagem = pygame.image.load('puc.jpg')
-
 
 # Carregando e redimensionando as imagens dos botões
 # Tamanho desejado para os botões
@@ -28,60 +25,66 @@ personagem_gustavo = pygame.transform.scale(personagem_gustavo, (botao_largura, 
 personagem_kelvin = pygame.image.load('kelvin.jpg').convert_alpha()
 personagem_kelvin = pygame.transform.scale(personagem_kelvin, (botao_largura, botao_altura))
 
-
-#classe do botão
+# Classe do botão
 class Button():
     def __init__(self, x, y, imagem):
         self.imagem = imagem
         self.rect = self.imagem.get_rect()
         self.rect.topleft = (x, y)
     def draw(self):
-        #Desenhando borda preta
+        # Desenhando borda preta
         pygame.draw.rect(tela, (0, 0, 0), self.rect.inflate(4, 4))
-        #desenhando o botão na tela
+        # Desenhando o botão na tela
         tela.blit(self.imagem, (self.rect.x, self.rect.y))
     def is_clicked(self, mouse_pos):
         return self.rect.collidepoint(mouse_pos)
 
-
-# Calculando posições para os botões
+# Definindo as dimensões dos botões
+botao_largura, botao_altura = 150, 150
 espaco_entre_botoes = 50
-total_largura_botoes = 2 * botao_largura + espaco_entre_botoes
+
+# Calcula a largura total ocupada pelos botões e espaçamentos
+total_largura_botoes = 4 * botao_largura + 3 * espaco_entre_botoes
+
+# Posição inicial (x)
 x_inicial = (largura - total_largura_botoes) / 2
+
+# Posição inicial (y)
 y_pos = (altura - botao_altura) / 2
 
-
-# Calculando a posição x para centralizar a nova imagem
-personagem_kelvin_x = (largura - botao_largura) // 2
-
-# Calculando a posição y para a nova imagem abaixo das imagens existentes
-personagem_kelvin_y = y_pos + botao_altura + 50
-
-#criando instancias do botão
+# Criando instâncias dos botões
 personagem_adryan = Button(x_inicial, y_pos, personagem_adryan)
-personagem_gustavo = Button(x_inicial + botao_largura + espaco_entre_botoes, y_pos, personagem_gustavo)
-personagem_kelvin = Button(personagem_kelvin_x, personagem_kelvin_y, personagem_kelvin)
+personagem_gustavo = Button(x_inicial + (botao_largura + espaco_entre_botoes), y_pos, personagem_gustavo)
+personagem_kelvin = Button(x_inicial + 2 * (botao_largura + espaco_entre_botoes), y_pos, personagem_kelvin)
+# Adicione aqui a imagem e a posição para o botão do personagem Caio, caso tenha uma
+# personagem_caio = Button(x_inicial + 3 * (botao_largura + espaco_entre_botoes), y_pos, personagem_caio_imagem)
 
-
-#loop do jogo
+# Loop do jogo
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            #Clicando com botão esquerdo do mouse
+            # Clicando com botão esquerdo do mouse
             if event.button == 1: 
                 if personagem_adryan.is_clicked(event.pos):
-                    print(f"Adryan selecionado!")
+                    print("Adryan selecionado!")
                 elif personagem_gustavo.is_clicked(event.pos):
-                    print(f"Gustavo selecionado!")
+                    print("Gustavo selecionado!")
                 elif personagem_kelvin.is_clicked(event.pos):
-                    print(f"Kelvin selecionado!")
-    pygame.display.update()
+                    print("Kelvin selecionado!")
+                # elif personagem_caio.is_clicked(event.pos):
+                #     print("Caio selecionado!")
 
+    # Desenhando a imagem de fundo
     tela.blit(background_imagem, (0, 0))
+
+    # Desenhando os botões
     personagem_adryan.draw()
     personagem_gustavo.draw()
     personagem_kelvin.draw()
+    # personagem_caio.draw()
+
+    # Atualizando a tela
     pygame.display.flip()
